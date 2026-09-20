@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PMLE 2027 Reviewer - Cassandra Lim</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #F43F5E;
+      --primary-dark: #6D122D;
+      --bg-cream: #FFF9FA;
+      --card-bg: #FFFFFF;
+      --text-main: #3D0A1B;
+      --border-rose: #FFE4E9;
+      --green: #10B981;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-cream);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding: 30px 20px;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    header {
+      background: linear-gradient(135deg, #F43F5E 0%, #FB7185 50%, #E11D48 100%);
+      color: white;
+      padding: 35px 30px;
+      border-radius: 24px;
+      box-shadow: 0 10px 25px rgba(244, 63, 94, 0.25);
+      margin-bottom: 30px;
+    }
+    .header-badge {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.25);
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    h1 {
+      font-family: 'Fredoka', cursive, sans-serif;
+      font-size: 32px;
+      margin-bottom: 6px;
+    }
+    .header-meta {
+      font-size: 14px;
+      opacity: 0.95;
+    }
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-rose);
+      padding: 18px;
+      border-radius: 18px;
+      text-align: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+    }
+    .stat-card .value {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin-top: 4px;
+    }
+    .stat-card .label {
+      font-size: 11px;
+      color: #71717A;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 600;
+    }
+    .section-box {
+      background: var(--card-bg);
+      border: 1px solid var(--border-rose);
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 25px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+    }
+    h2 {
+      font-family: 'Fredoka', cursive, sans-serif;
+      font-size: 20px;
+      color: var(--primary-dark);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 2px solid #FFF0F3;
+      padding-bottom: 10px;
+    }
+    .tos-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      background: #FFFDFC;
+      border: 1px solid var(--border-rose);
+      border-radius: 12px;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .badge-completed { background: #DCFCE7; color: #15803D; }
+    .badge-pending { background: #FFE4E6; color: #BE123C; }
+    .badge-weight { background: #FCE7F3; color: #9D174D; font-weight: bold; }
+    .q-card {
+      border: 1px solid var(--border-rose);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 14px;
+      background: #FFFDFE;
+    }
+    .q-title {
+      font-weight: 600;
+      font-size: 14px;
+      color: #4C0519;
+      margin-bottom: 10px;
+    }
+    .q-opt {
+      font-size: 13px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      margin-bottom: 4px;
+      background: #F8FAFC;
+    }
+    .q-opt.correct {
+      background: #ECFDF5;
+      color: #065F46;
+      font-weight: 600;
+      border-left: 3px solid #10B981;
+    }
+    .q-exp {
+      font-size: 12px;
+      background: #FFF1F2;
+      padding: 10px 12px;
+      border-radius: 8px;
+      margin-top: 10px;
+      color: #881337;
+    }
+    .formula-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 12px;
+    }
+    .formula-card {
+      background: #FFF5F7;
+      border: 1px solid var(--border-rose);
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 12px;
+    }
+    .formula-card strong { color: var(--primary-dark); font-size: 13px; }
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      color: #A1A1AA;
+      margin-top: 40px;
+    }
+    @media print {
+      body { background: white; padding: 0; }
+      header { box-shadow: none; }
+      .section-box { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="header-badge">🍓 Official PMLE 2027 Board Reviewer</div>
+      <h1>Psychometrician Licensure Examination 2027</h1>
+      <p class="header-meta">Candidate: <strong>Cassandra Lim</strong> (University of Santo Tomas / UP Diliman) • Target: August 2027</p>
+      <p style="margin-top: 8px; font-size: 13px; opacity: 0.9;">"Why I Want to Become an RPm": <em>"I want to become a Registered Psychometrician to promote ethical mental health assessments in the Philippines, advocate for compassionate psychometrics in clinical and school settings, and prove to myself that consistent small efforts turn into big dreams fulfilled! 🍓🎀✨"</em></p>
+    </header>
+
+    <div class="stats-bar">
+      <div class="stat-card">
+        <div class="label">Overall Review Progress</div>
+        <div class="value" style="color: var(--primary);">0%</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Study Streak</div>
+        <div class="value">🔥 12 Days</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Total Study Hours</div>
+        <div class="value">⏱️ 64.5 hrs</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">TOS Weights</div>
+        <div class="value" style="font-size: 15px;">PA 40% • Others 20%</div>
+      </div>
+    </div>
+
+    <!-- HIGH-YIELD FORMULAS -->
+    <div class="section-box">
+      <h2>🍓 Core Psychometric Assessment Formulas</h2>
+      <div class="formula-grid">
+        <div class="formula-card">
+          <strong>Standard Error of Measurement (SEM)</strong>
+          <p style="font-family: monospace; font-size: 13px; margin: 4px 0; color: #BE123C;">SEM = s × √(1 - rxx)</p>
+          <p>Measures amount of error variance in observed scores. When rxx = 1.0, SEM = 0.</p>
+        </div>
+        <div class="formula-card">
+          <strong>Spearman-Brown Prophecy</strong>
+          <p style="font-family: monospace; font-size: 13px; margin: 4px 0; color: #BE123C;">r_SB = (2 × r_half) / (1 + r_half)</p>
+          <p>Estimates split-half reliability coefficient corrected for total test length.</p>
+        </div>
+        <div class="formula-card">
+          <strong>Kuder-Richardson Formula 20 (KR-20)</strong>
+          <p style="font-family: monospace; font-size: 13px; margin: 4px 0; color: #BE123C;">KR-20 = [k/(k-1)] × [1 - Σpq / s²]</p>
+          <p>For dichotomous (right/wrong) items. Compare with Cronbach's Alpha for Likert scales.</p>
+        </div>
+        <div class="formula-card">
+          <strong>WAIS-IV Four Index Standard Scores</strong>
+          <p style="font-family: monospace; font-size: 13px; margin: 4px 0; color: #BE123C;">Mean = 100, SD = 15; Subtest M = 10, SD = 3</p>
+          <p>Indices: VCI, PRI, WMI, PSI. FSIQ composites require certified psychometrics.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABLE OF SPECIFICATIONS -->
+    <div class="section-box">
+      <h2>📋 PMLE 2027 Table of Specifications (TOS)</h2>
+      <p style="font-size: 12px; color: #71717A; margin-bottom: 12px;">Psychological Assessment accounts for 40% of the board examination, with Developmental, Abnormal, and I/O Psychology accounting for 20% each.</p>
+
+      
+        <div style="margin-bottom: 20px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <h3 style="font-size: 15px; color: #4C0519; font-weight: bold;">Developmental Psychology</h3>
+            <span class="badge badge-weight">20% PRC Weight</span>
+          </div>
+          
+            <div class="tos-item">
+              <span><strong>1.</strong> Human Development Principles & Research Designs</span>
+              <span class="badge badge-pending">
+                In Progress
+              </span>
+            </div>
+          
+            <div class="tos-item">
+              <span><strong>2.</strong> Major Developmental Theories (Freud, Erikson, Piaget, Vygotsky)</span>
+              <span class="badge badge-pending">
+                In Progress
+              </span>
+            </div>
+          
+            <div class="tos-item">
+              <span><strong>3.</strong> Cognitive & Language Development Across the Lifespan</span>
+              <span class="badge badge-pending">
+                In Progress
+              </span>
+            </div>
+          
+            <div class="tos-item">
+              <span><strong>4.</strong> Social-Emotional Development & Attachment</span>
+              <span class="badge badge-pending">
+                In Progress
+              </span>
+            </div>
+          
+            <div class="tos-item">
+              <span><strong>5.</strong> Personality & Identity Development</span>
+              <span class="badge badge-pending">
+                In Progress
+              </span>
+            </div>
+          
+            <div class="tos-item">
+              <span><strong>6.</strong> Lifespan Development (Prenatal to Late Adulthood & Death)</span>
+              <span class="badge badge-pending">
+                In Progress
+              </span>
+            </div>
+          
+            <div class="tos-item">
+              <span><strong>7.</strong> Developmental Assessment & Screening Tools</span>
+              <span class="badge badge-pending">
+                In Progress
+              </span>
+            </div>
+          
+        </div>
+      
+        <div style="margin-bottom: 20px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <h3 style="font-size: 15px; color: #4C0519; font-weight: bold;">Abnormal Psychology</h3>
+            <span class="badge badge-weight">20% PRC Weight</span>
+          </div>
+          
+            <div class="tos-item">
+              <span><strong>1.</strong> Diagnostic Concepts & Criteria (DSM-5-TR / ICD-11)</span>
+              <span class="badge badge-pending">
+                In Progress
+              </span>
+            </div>
+          
+            <div class="tos-item">
+              <span><strong>2.</strong> Etiology & Multi-Axial/Biopsychosocial Perspectives</span>
+              <span class="badge badge-pending">
+                In Progress
+              </span>
+            </div>
+          
+            <div class="tos-item">
+              <span><strong>3.</strong> Neurodevelopmental & Schizophrenia Spectrum Disorders</span>
+              <span class="badge badge-pending">
+                In Progress
+              </span>
+            </div>
+          
+            <div class="tos-item">
+              <span><strong>4.</strong> Depressive, Bipolar & Anxiety Spectrum Disorders</span>
+              <span class="badge badge-pending">
+                In Progress
+              </span>
+            </div>
+          
+            <div class="tos-item">
+              <span><strong>5.</strong> OCD, Trauma & Dissociative Disorders</span>
+              <span class="badge badge-pending">
+                In Progress
+              </span>
+            </div>
+          
+            <div class="tos-item">
+              <span><strong>6.</strong> Personality Disorders (Clusters A, B, and C)</span>
+              <span class="badge badge-pending">
+                In Progress
+              </span>
+            </div>
+          
+            <div class="tos-item">
+              <span><strong>7.</strong> Somatic, Feeding, Substance & Neurocognitive Disorders</span>
+              <span class="badge badge-pending">
+                In Progress
+              </span>
+            </div>
+          
+            <div class="tos-item">
+              <span><strong>8.</strong> Philippine Mental Health Act (RA 11036) & Clinical Ethics</span>
+              <span class="badge badge-pending">
+                In Progress
+              </span>
+            </div>
+          
+        </div>
+      
+        <div style="margin-bottom: 20px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <h3 style="font-size: 15px; color: #4C0519; font-weight: bold;">Industrial/Organizational Psychology</h3>
+            <span class="badge badge-weight">20% PRC Weight</span>
+          </div>
+          
+            <div class="tos-item">
+              <span><strong>1.</strong> Job Analysis & Competency Modeling</span>
+              <span class="badge badge-pending">
+                In Progress
+              </span>
+            </div>
+          
+            <div class="tos-item">
+              <span><strong>2.</strong> Personnel Recruitment & Selection Systems</span>
+              <span class="badge badge-pending">
+                In Progress
+              </span>
+            </div>
+          
+            <div class="tos-item">
+              <span><strong>3.</strong> Performance Appraisal & Management</span>
+              <span class="badge badge-pending">
+                In Progress
+              </span>
+            </div>
+          
+            <div class="tos-item">
+              <span><strong>4.</strong> Training, Development & Program Evaluation</span>
+              <span class="badge badge-pending">
+                In Progress
+              </span>
+            </div>
+          
+            <div class="tos-item">
+              <span><strong>5.</strong> Work Motivation Theories & Employee Engagement</span>
+              <span class="badge badge-pending">
+                In Progress
+              </span>
+            </div>
+          
+            <div class="tos-item">
+              <span><strong>6.</strong> Leadership & Group Dynamics in Organizations</span>
+              <span class="badge badge-pending">
+                In Progress
+              </span>
+            </div>
+          
+            <div class="tos-item">
+              <span><strong>7.</strong> Work Environment, Ergonomics & Employee Well-being</span>
+              <span class="badge badge-pending">
+                In Progress
+              </span>
+            </div>
+          
+        </div>
+      
+        <div style="margin-bottom: 20px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <h3 style="font-size: 15px; color: #4C0519; font-weight: bold;">Psychological Assessment</h3>
+            <span class="badge badge-weight">40% PRC Weight</span>
+          </div>
+          
+            <div class="tos-item">
+              <span><strong>1.</strong> Principles of Psychological Testing & Measurement Scales</span>
+              <span class="badge badge-pending">
+                In Progress
+              </span>
+            </div>
+          
+            <div class="tos-item">
+              <span><strong>2.</strong> Reliability: Theory, Types & Error Variance</span>
+              <span class="badge badge-pending">
+                In Progress
+              </span>
+            </div>
+          
+            <div class="tos-item">
+              <span><strong>3.</strong> Validity: Evidence & Evaluation</span>
+              <span class="badge badge-pending">
+                In Progress
+              </span>
+            </div>
+          
+            <div class="tos-item">
+              <span><strong>4.</strong> Test Construction & Item Analysis</span>
+              <span class="badge badge-pending">
+                In Progress
+              </span>
+            </div>
+          
+            <div class="tos-item">
+              <span><strong>5.</strong> Norms, Standardization & Score Transformations</span>
+              <span class="badge badge-pending">
+                In Progress
+              </span>
+            </div>
+          
+            <div class="tos-item">
+              <span><strong>6.</strong> Intelligence & Cognitive Ability Testing</span>
+              <span class="badge badge-pending">
+                In Progress
+              </span>
+            </div>
+          
+            <div class="tos-item">
+              <span><strong>7.</strong> Personality Assessment & Objective/Projective Tests</span>
+              <span class="badge badge-pending">
+                In Progress
+              </span>
+            </div>
+          
+            <div class="tos-item">
+              <span><strong>8.</strong> Ethical Use of Tests & Philippine Psychology Act (RA 10029)</span>
+              <span class="badge badge-pending">
+                In Progress
+              </span>
+            </div>
+          
+        </div>
+      
+    </div>
+
+    <!-- HIGH-YIELD BOARD QUESTIONS -->
+    <div class="section-box">
+      <h2>🧠 Curated High-Yield PMLE Practice Questions</h2>
+      
+        <div class="q-card">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+            <span style="font-size: 11px; font-weight: bold; color: #E11D48;">Developmental Psychology • Major Developmental Theories</span>
+            <span style="font-size: 10px; background: #F1F5F9; padding: 2px 6px; border-radius: 4px;">Moderate</span>
+          </div>
+          <div class="q-title">1. According to Erik Erikson’s theory of psychosocial development, an adolescent who explores several alternative occupational paths, belief systems, and social roles without yet making a definitive commitment is in which identity status as defined by James Marcia?</div>
+          
+            <div class="q-opt ">
+              A. Identity Diffusion 
+            </div>
+          
+            <div class="q-opt ">
+              B. Identity Foreclosure 
+            </div>
+          
+            <div class="q-opt correct">
+              C. Moratorium  (Correct Answer)
+            </div>
+          
+            <div class="q-opt ">
+              D. Identity Achievement 
+            </div>
+          
+          <div class="q-exp">
+            <strong>Rationale:</strong> James Marcia defined Moratorium as the status of individuals who are in the midst of an active identity crisis and actively exploring various alternatives, commitments, and philosophies, but have not yet made firm commitments.<br/>
+            <strong>🍓 Board Tip:</strong> Remember Marcia’s 2x2 grid: Crisis (Exploration) vs. Commitment. High Exploration + Low Commitment = Moratorium.
+          </div>
+        </div>
+      
+        <div class="q-card">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+            <span style="font-size: 11px; font-weight: bold; color: #E11D48;">Developmental Psychology • Cognitive Development</span>
+            <span style="font-size: 10px; background: #F1F5F9; padding: 2px 6px; border-radius: 4px;">Board-Level</span>
+          </div>
+          <div class="q-title">2. A 7-year-old child observes two identical glasses filled with equal amounts of juice. When the liquid from one glass is poured into a taller, narrower container, the child correctly deduces that both containers still hold the exact same volume of juice because "you can just pour it back and it will be the same." This justification best demonstrates:</div>
+          
+            <div class="q-opt ">
+              A. Centration 
+            </div>
+          
+            <div class="q-opt correct">
+              B. Reversibility of thought  (Correct Answer)
+            </div>
+          
+            <div class="q-opt ">
+              C. Animistic reasoning 
+            </div>
+          
+            <div class="q-opt ">
+              D. Transductive logic 
+            </div>
+          
+          <div class="q-exp">
+            <strong>Rationale:</strong> In Piaget’s Concrete Operational stage (approx. 7–11 years), children master conservation largely due to reversibility—the cognitive understanding that an action or transformation can be mentally undone or reversed.<br/>
+            <strong>🍓 Board Tip:</strong> Preoperational children fail conservation tests because of Centration (focusing on one dimension, e.g. height) and lack of Reversibility.
+          </div>
+        </div>
+      
+        <div class="q-card">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+            <span style="font-size: 11px; font-weight: bold; color: #E11D48;">Developmental Psychology • Major Developmental Theories</span>
+            <span style="font-size: 10px; background: #F1F5F9; padding: 2px 6px; border-radius: 4px;">Easy</span>
+          </div>
+          <div class="q-title">3. Lev Vygotsky argued that cognitive growth occurs through social interaction within the difference between what a learner can achieve independently versus what they can achieve with guidance from a More Knowledgeable Other (MKO). What term did he coin for this range?</div>
+          
+            <div class="q-opt ">
+              A. Epigenetic Principle 
+            </div>
+          
+            <div class="q-opt correct">
+              B. Zone of Proximal Development (ZPD)  (Correct Answer)
+            </div>
+          
+            <div class="q-opt ">
+              C. Schema Equilibration 
+            </div>
+          
+            <div class="q-opt ">
+              D. Scaffolding Boundary 
+            </div>
+          
+          <div class="q-exp">
+            <strong>Rationale:</strong> The Zone of Proximal Development (ZPD) is Vygotsky’s term for tasks that are too difficult for a child to master alone but can be learned with the guidance and assistance of adults or more skilled peers. (Note: Jerome Bruner coined the specific term "scaffolding" based on Vygotsky’s work).<br/>
+            <strong>🍓 Board Tip:</strong> Board alert: Vygotsky = ZPD & MKO; Bruner = Scaffolding. Do not confuse who originated the terms!
+          </div>
+        </div>
+      
+        <div class="q-card">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+            <span style="font-size: 11px; font-weight: bold; color: #E11D48;">Developmental Psychology • Social-Emotional Development</span>
+            <span style="font-size: 10px; background: #F1F5F9; padding: 2px 6px; border-radius: 4px;">Moderate</span>
+          </div>
+          <div class="q-title">4. In Mary Ainsworth’s Strange Situation classification, an infant who explores the room freely when the mother is present, shows marked distress upon separation, but upon reunion actively seeks contact and is promptly comforted is classified as having which attachment pattern?</div>
+          
+            <div class="q-opt ">
+              A. Insecure-Avoidant (Type A) 
+            </div>
+          
+            <div class="q-opt correct">
+              B. Secure Attachment (Type B)  (Correct Answer)
+            </div>
+          
+            <div class="q-opt ">
+              C. Insecure-Resistant/Ambivalent (Type C) 
+            </div>
+          
+            <div class="q-opt ">
+              D. Disorganized-Disoriented (Type D) 
+            </div>
+          
+          <div class="q-exp">
+            <strong>Rationale:</strong> Securely attached infants (Type B) use the caregiver as a secure base to explore the environment. They show separation protest but greet the caregiver with positive affect and soothe quickly upon reunion.<br/>
+            <strong>🍓 Board Tip:</strong> Type A avoids the caregiver on reunion; Type C shows clinginess mixed with anger/resistance; Type D shows freezing or apprehension.
+          </div>
+        </div>
+      
+        <div class="q-card">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+            <span style="font-size: 11px; font-weight: bold; color: #E11D48;">Developmental Psychology • Lifespan Development</span>
+            <span style="font-size: 10px; background: #F1F5F9; padding: 2px 6px; border-radius: 4px;">Difficult</span>
+          </div>
+          <div class="q-title">5. A 15-year-old student who gets a tiny blemish on her forehead is convinced that everyone in school is looking exclusively at her and mocking her. According to David Elkind, this cognitive distortion characteristic of adolescent egocentrism is known as the:</div>
+          
+            <div class="q-opt ">
+              A. Personal Fable 
+            </div>
+          
+            <div class="q-opt correct">
+              B. Imaginary Audience  (Correct Answer)
+            </div>
+          
+            <div class="q-opt ">
+              C. Illusion of Invulnerability 
+            </div>
+          
+            <div class="q-opt ">
+              D. False Consensus Effect 
+            </div>
+          
+          <div class="q-exp">
+            <strong>Rationale:</strong> David Elkind identified two components of adolescent egocentrism: the Imaginary Audience (the belief that others are as interested in them as they are in themselves) and the Personal Fable (the belief in one’s unique invulnerability and special destiny).<br/>
+            <strong>🍓 Board Tip:</strong> Imaginary audience = "Everyone is watching me"; Personal fable = "Nobody understands me / bad things can never happen to me".
+          </div>
+        </div>
+      
+        <div class="q-card">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+            <span style="font-size: 11px; font-weight: bold; color: #E11D48;">Developmental Psychology • Lifespan Development</span>
+            <span style="font-size: 10px; background: #F1F5F9; padding: 2px 6px; border-radius: 4px;">Board-Level</span>
+          </div>
+          <div class="q-title">6. According to Robert Peck’s expansion of Erikson’s final stage of Integrity vs. Despair, late adults must resolve which developmental challenge to achieve healthy psychological aging without tying their self-worth exclusively to their career history?</div>
+          
+            <div class="q-opt correct">
+              A. Ego Differentiation vs. Work-Role Preoccupation  (Correct Answer)
+            </div>
+          
+            <div class="q-opt ">
+              B. Body Transcendence vs. Body Preoccupation 
+            </div>
+          
+            <div class="q-opt ">
+              C. Ego Transcendence vs. Ego Preoccupation 
+            </div>
+          
+            <div class="q-opt ">
+              D. Generativity vs. Stagnation 
+            </div>
+          
+          <div class="q-exp">
+            <strong>Rationale:</strong> Robert Peck specified three adaptations in late adulthood: 1) Ego Differentiation vs. Work-Role Preoccupation (redefining worth beyond career), 2) Body Transcendence vs. Body Preoccupation, and 3) Ego Transcendence vs. Ego Preoccupation.<br/>
+            <strong>🍓 Board Tip:</strong> Peck expanded Erikson’s last two stages into specific psychological tasks. High-yield for geriatric psychology items!
+          </div>
+        </div>
+      
+        <div class="q-card">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+            <span style="font-size: 11px; font-weight: bold; color: #E11D48;">Developmental Psychology • Major Developmental Theories</span>
+            <span style="font-size: 10px; background: #F1F5F9; padding: 2px 6px; border-radius: 4px;">Moderate</span>
+          </div>
+          <div class="q-title">7. According to Urie Bronfenbrenner’s Bioecological Systems Theory, the interaction between a child’s parents and their grade school teachers represents which environmental layer?</div>
+          
+            <div class="q-opt ">
+              A. Microsystem 
+            </div>
+          
+            <div class="q-opt correct">
+              B. Mesosystem  (Correct Answer)
+            </div>
+          
+            <div class="q-opt ">
+              C. Exosystem 
+            </div>
+          
+            <div class="q-opt ">
+              D. Macrosystem 
+            </div>
+          
+          <div class="q-exp">
+            <strong>Rationale:</strong> The Mesosystem comprises linkages and processes taking place between two or more major settings containing the developing person (e.g., relations between home and school, parents and peers).<br/>
+            <strong>🍓 Board Tip:</strong> Micro = immediate setting (home); Meso = connections between microsystems (PTA meeting); Exo = external setting influencing individual (parent’s workplace); Macro = cultural values; Chrono = time.
+          </div>
+        </div>
+      
+        <div class="q-card">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+            <span style="font-size: 11px; font-weight: bold; color: #E11D48;">Abnormal Psychology • Depressive & Bipolar Disorders</span>
+            <span style="font-size: 10px; background: #F1F5F9; padding: 2px 6px; border-radius: 4px;">Board-Level</span>
+          </div>
+          <div class="q-title">8. Under the DSM-5-TR, which diagnostic criteria definitively separates a diagnosis of Bipolar I Disorder from Bipolar II Disorder?</div>
+          
+            <div class="q-opt ">
+              A. Bipolar I requires at least one Major Depressive Episode, whereas Bipolar II does not. 
+            </div>
+          
+            <div class="q-opt correct">
+              B. Bipolar I requires the occurrence of at least one Manic Episode, whereas Bipolar II requires a Hypomanic Episode and a Major Depressive Episode without any manic episode.  (Correct Answer)
+            </div>
+          
+            <div class="q-opt ">
+              C. Bipolar I is treated with lithium, while Bipolar II is exclusively treated with SSRIs. 
+            </div>
+          
+            <div class="q-opt ">
+              D. Bipolar I has psychotic symptoms in every cycle, while Bipolar II cannot feature rapid cycling. 
+            </div>
+          
+          <div class="q-exp">
+            <strong>Rationale:</strong> By DSM-5-TR definition, the presence of even a single lifetime Manic Episode satisfies the criteria for Bipolar I Disorder (a major depressive episode is not strictly mandatory for Bipolar I, though common). Bipolar II requires at least one Hypomanic episode AND at least one Major Depressive Episode, with NO history of full manic episodes.<br/>
+            <strong>🍓 Board Tip:</strong> A full manic episode immediately rules OUT Bipolar II and confirms Bipolar I!
+          </div>
+        </div>
+      
+        <div class="q-card">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+            <span style="font-size: 11px; font-weight: bold; color: #E11D48;">Abnormal Psychology • Personality Disorders</span>
+            <span style="font-size: 10px; background: #F1F5F9; padding: 2px 6px; border-radius: 4px;">Moderate</span>
+          </div>
+          <div class="q-title">9. A 28-year-old client displays a pervasive pattern of detachment from social relationships and a restricted range of emotional expression in interpersonal settings. He expresses no desire for close friendships, chooses solitary computer programming hobbies, and appears indifferent to praise or criticism. He denies perceptual distortions or paranoid ideation. The most appropriate diagnosis is:</div>
+          
+            <div class="q-opt ">
+              A. Schizotypal Personality Disorder 
+            </div>
+          
+            <div class="q-opt correct">
+              B. Schizoid Personality Disorder  (Correct Answer)
+            </div>
+          
+            <div class="q-opt ">
+              C. Avoidant Personality Disorder 
+            </div>
+          
+            <div class="q-opt ">
+              D. Paranoid Personality Disorder 
+            </div>
+          
+          <div class="q-exp">
+            <strong>Rationale:</strong> Schizoid Personality Disorder (Cluster A) is characterized by detachment from social relationships and restricted emotional expression. Unlike Avoidant Personality (who yearn for connection but fear rejection) or Schizotypal (who have eccentricities and magical thinking), individuals with Schizoid PD genuinely prefer isolation.<br/>
+            <strong>🍓 Board Tip:</strong> Schizoid = Solitary & indifferent; Schizotypal = "Magical" eccentricities; Avoidant = Anxious, craves connection but fears humiliation.
+          </div>
+        </div>
+      
+        <div class="q-card">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+            <span style="font-size: 11px; font-weight: bold; color: #E11D48;">Abnormal Psychology • Diagnostic Concepts</span>
+            <span style="font-size: 10px; background: #F1F5F9; padding: 2px 6px; border-radius: 4px;">Easy</span>
+          </div>
+          <div class="q-title">10. When clinical psychologists evaluate abnormal behavior using the classic "Four Ds" framework, what are the four criteria?</div>
+          
+            <div class="q-opt ">
+              A. Duration, Diagnosis, Defense, and Deterioration 
+            </div>
+          
+            <div class="q-opt correct">
+              B. Deviance, Distress, Dysfunction, and Danger  (Correct Answer)
+            </div>
+          
+            <div class="q-opt ">
+              C. Deficit, Disorganization, Dissociation, and Depression 
+            </div>
+          
+            <div class="q-opt ">
+              D. Delusion, Disorientation, Discord, and Dementia 
+            </div>
+          
+          <div class="q-exp">
+            <strong>Rationale:</strong> The common definition of abnormality includes Deviance (from cultural/statistical norms), Distress (personal suffering), Dysfunction (interference with daily life functioning), and Danger (risk of harm to self or others).<br/>
+            <strong>🍓 Board Tip:</strong> Remember the 4 Ds: Deviance, Distress, Dysfunction, Danger.
+          </div>
+        </div>
+      
+        <div class="q-card">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+            <span style="font-size: 11px; font-weight: bold; color: #E11D48;">Abnormal Psychology • Schizophrenia Spectrum Disorders</span>
+            <span style="font-size: 10px; background: #F1F5F9; padding: 2px 6px; border-radius: 4px;">Moderate</span>
+          </div>
+          <div class="q-title">11. In evaluating a patient with Schizophrenia, which of the following is categorized as a negative symptom rather than a positive symptom?</div>
+          
+            <div class="q-opt ">
+              A. Auditory command hallucinations 
+            </div>
+          
+            <div class="q-opt ">
+              B. Delusions of reference 
+            </div>
+          
+            <div class="q-opt correct">
+              C. Avolition and flat affect  (Correct Answer)
+            </div>
+          
+            <div class="q-opt ">
+              D. Grossly disorganized speech (derailment) 
+            </div>
+          
+          <div class="q-exp">
+            <strong>Rationale:</strong> Positive symptoms represent an excess or distortion of normal functions (hallucinations, delusions, disorganized speech). Negative symptoms reflect a reduction or absence of normal functions (avolition, affective flattening, alogia, anhedonia, asociality).<br/>
+            <strong>🍓 Board Tip:</strong> Remember the 5 A’s of negative symptoms in Schizophrenia: Affective flattening, Avolition, Alogia, Anhedonia, Asociality.
+          </div>
+        </div>
+      
+        <div class="q-card">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+            <span style="font-size: 11px; font-weight: bold; color: #E11D48;">Abnormal Psychology • OCD, Trauma & Dissociative Disorders</span>
+            <span style="font-size: 10px; background: #F1F5F9; padding: 2px 6px; border-radius: 4px;">Difficult</span>
+          </div>
+          <div class="q-title">12. A client survived a severe bus accident in EDSA 2 weeks ago. Since then, he experiences intrusive flashbacks, depersonalization, hyperarousal, and emotional numbness. If full criteria are met, which diagnosis is appropriate given the 2-week duration since the traumatic event?</div>
+          
+            <div class="q-opt ">
+              A. Posttraumatic Stress Disorder (PTSD) 
+            </div>
+          
+            <div class="q-opt correct">
+              B. Acute Stress Disorder (ASD)  (Correct Answer)
+            </div>
+          
+            <div class="q-opt ">
+              C. Adjustment Disorder with Anxiety 
+            </div>
+          
+            <div class="q-opt ">
+              D. Dissociative Amnesia with Fugue 
+            </div>
+          
+          <div class="q-exp">
+            <strong>Rationale:</strong> Acute Stress Disorder is diagnosed when symptoms develop within 1 month of the traumatic event and persist for at least 3 days up to 1 month. If symptoms continue beyond 1 month, the diagnosis changes to PTSD.<br/>
+            <strong>🍓 Board Tip:</strong> Timeline rule: 3 days to 1 month = Acute Stress Disorder. More than 1 month = PTSD.
+          </div>
+        </div>
+      
+        <div class="q-card">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+            <span style="font-size: 11px; font-weight: bold; color: #E11D48;">Abnormal Psychology • Philippine Mental Health Act (RA 11036)</span>
+            <span style="font-size: 10px; background: #F1F5F9; padding: 2px 6px; border-radius: 4px;">Board-Level</span>
+          </div>
+          <div class="q-title">13. Under Republic Act No. 11036 (The Philippine Mental Health Act), what is the legal standard regarding a service user’s right to informed consent for psychiatric interventions?</div>
+          
+            <div class="q-opt ">
+              A. Informed consent is not required if the client is diagnosed with any psychotic disorder. 
+            </div>
+          
+            <div class="q-opt correct">
+              B. Informed consent must be obtained from the service user, except in psychiatric emergencies where there is an imminent threat of serious harm to self or others.  (Correct Answer)
+            </div>
+          
+            <div class="q-opt ">
+              C. A barangay captain can unilaterally override informed consent at any time. 
+            </div>
+          
+            <div class="q-opt ">
+              D. Only parents or legal guardians can provide informed consent regardless of the patient’s age. 
+            </div>
+          
+          <div class="q-exp">
+            <strong>Rationale:</strong> RA 11036 explicitly protects the rights of service users, affirming that services must be based on voluntary informed consent, with defined exceptions strictly confined to emergency situations where imminent danger to self or others exists as evaluated by qualified professionals.<br/>
+            <strong>🍓 Board Tip:</strong> PRC Board exams frequently test provisions of RA 11036 and patient rights regarding involuntary treatment and emergency holds.
+          </div>
+        </div>
+      
+        <div class="q-card">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+            <span style="font-size: 11px; font-weight: bold; color: #E11D48;">Industrial/Organizational Psychology • Personnel Recruitment & Selection Systems</span>
+            <span style="font-size: 10px; background: #F1F5F9; padding: 2px 6px; border-radius: 4px;">Board-Level</span>
+          </div>
+          <div class="q-title">14. An HR department uses an employment battery test for managerial applicants. 100 male applicants take the test and 60 are hired (selection rate = 60%). 50 female applicants take the test and 24 are hired (selection rate = 48%). Applying the EEOC / 4/5ths (80%) Rule to assess adverse impact:</div>
+          
+            <div class="q-opt ">
+              A. Adverse impact exists because 48% is less than 80% (which is 0.80 * 60% = 48%, so it exactly equals and does not violate the threshold). 
+            </div>
+          
+            <div class="q-opt correct">
+              B. Adverse impact does not exist because the selection rate for females (48%) is 80% of the selection rate for males (60% * 0.80 = 48%).  (Correct Answer)
+            </div>
+          
+            <div class="q-opt ">
+              C. Adverse impact is present because fewer females applied in total numbers. 
+            </div>
+          
+            <div class="q-opt ">
+              D. The 4/5ths rule cannot be applied without conducting a concurrent validation study. 
+            </div>
+          
+          <div class="q-exp">
+            <strong>Rationale:</strong> The 80% or 4/5ths rule states that adverse impact occurs if the selection rate for a protected group is less than 80% (4/5ths) of the rate for the highest group. Here: 80% of 60% is 48%. Because the female selection rate is 48% (which meets the 80% threshold of the majority group rate), adverse impact is not indicated by this guideline.<br/>
+            <strong>🍓 Board Tip:</strong> Calculate: Minority selection rate / Majority selection rate. 48% / 60% = 0.80 (80%). If it is 80% or above, no adverse impact.
+          </div>
+        </div>
+      
+        <div class="q-card">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+            <span style="font-size: 11px; font-weight: bold; color: #E11D48;">Industrial/Organizational Psychology • Job Analysis & Competency Modeling</span>
+            <span style="font-size: 10px; background: #F1F5F9; padding: 2px 6px; border-radius: 4px;">Moderate</span>
+          </div>
+          <div class="q-title">15. In conducting a formal Job Analysis, the worker-oriented attributes commonly abbreviated as KSAOs refer to:</div>
+          
+            <div class="q-opt correct">
+              A. Knowledge, Skills, Abilities, and Other characteristics  (Correct Answer)
+            </div>
+          
+            <div class="q-opt ">
+              B. Key competencies, Supervisory skills, Aptitudes, and Objectives 
+            </div>
+          
+            <div class="q-opt ">
+              C. Knowledge, Standards, Assessments, and Outcomes 
+            </div>
+          
+            <div class="q-opt ">
+              D. Kinesthetic abilities, Social competence, Adaptability, and Outlook 
+            </div>
+          
+          <div class="q-exp">
+            <strong>Rationale:</strong> In I/O Psychology, KSAOs stand for Knowledge (organized body of information), Skills (practiced physical or mental tasks), Abilities (underlying stable capability), and Other characteristics (personality traits, values, certifications).<br/>
+            <strong>🍓 Board Tip:</strong> Job Description = Task-oriented (duties, tasks, working conditions). Job Specification = Worker-oriented (KSAOs).
+          </div>
+        </div>
+      
+    </div>
+
+    <!-- MISTAKE NOTEBOOK -->
+    
+    <div class="section-box">
+      <h2>❌ My Mistake Notebook</h2>
+      
+        <div class="q-card" style="border-left: 4px solid #F43F5E;">
+          <div class="q-title">1. An adolescent exploring several occupational and philosophical alternatives without making a firm commitment is in which identity status?</div>
+          <p style="font-size: 12px; margin-bottom: 4px;"><span style="color: #DC2626; font-weight: bold;">Your Answer:</span> Identity Diffusion</p>
+          <p style="font-size: 12px; margin-bottom: 8px;"><span style="color: #16A34A; font-weight: bold;">Correct Answer:</span> Moratorium</p>
+          <div class="q-exp">Moratorium has active crisis/exploration without commitment. Diffusion has neither exploration nor commitment.</div>
+          <p style="font-size: 12px; margin-top: 8px; font-style: italic;"><strong>Personal Note:</strong> "Remember: Diffusion = "Idk and I don't care". Moratorium = "I am actively exploring options right now!""</p>
+        </div>
+      
+        <div class="q-card" style="border-left: 4px solid #F43F5E;">
+          <div class="q-title">2. Applying the 80% / 4/5ths Rule in an employment selection case where male selection is 60% and female is 48%...</div>
+          <p style="font-size: 12px; margin-bottom: 4px;"><span style="color: #DC2626; font-weight: bold;">Your Answer:</span> Adverse impact is present because female applicants were fewer.</p>
+          <p style="font-size: 12px; margin-bottom: 8px;"><span style="color: #16A34A; font-weight: bold;">Correct Answer:</span> Adverse impact is not present (48% / 60% = 80%).</p>
+          <div class="q-exp">The 80% rule compares the selection ratios (48% / 60% = 0.80). Since it equals 80%, adverse impact is not indicated by this threshold.</div>
+          <p style="font-size: 12px; margin-top: 8px; font-style: italic;"><strong>Personal Note:</strong> "Don't look at total headcount; look at the percentage hired ratio!"</p>
+        </div>
+      
+    </div>
+    
+
+    <div class="footer">
+      <p>🍓 Generated from PMLE 2027 Review App • Philippine Psychometrician Licensure Examination</p>
+      <p>Export Date: September 20, 2026</p>
+    </div>
+  </div>
+</body>
+</html>
